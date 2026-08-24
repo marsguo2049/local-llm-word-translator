@@ -1,10 +1,12 @@
 # Local LLM Word Translator
 
+**English** | [简体中文](README.zh-CN.md)
+
 A privacy-first, resumable Word (`.docx`) translation workflow powered by a local LLM through LM Studio.
 
-基于 LM Studio 本地大模型的隐私优先 Word 英译中工具，支持自动术语提取、断点续传、中英对照输出和选择性重译。原始文档、译文、术语表、日志与进度默认不会进入 Git。
+It supports automatic terminology extraction, terminology auditing, resumable translation, Chinese-only output, bilingual output, and selective retranslation. Source documents, translations, terminology, logs, and progress data are excluded from Git by default.
 
-## Features / 功能
+## Features
 
 - Calls a locally loaded model through the LM Studio REST API
 - Translates long `.docx` documents in manageable batches
@@ -15,7 +17,7 @@ A privacy-first, resumable Word (`.docx`) translation workflow powered by a loca
 - Retranslates only passages affected by a corrected term
 - Recovers from a known LM Studio `peg-native` parser error by splitting the failed batch
 
-## Privacy / 隐私
+## Privacy
 
 The following directories are ignored by Git and must never be force-added:
 
@@ -29,46 +31,44 @@ logs/        prompts, responses, and runtime logs
 
 `config.json` is also ignored. Only the sanitized `config.example.json` is public.
 
-## Requirements / 环境要求
+## Requirements
 
 - Python 3.11 or 3.12
 - LM Studio with a chat/instruct GGUF model loaded
 - LM Studio local server running, normally at `http://127.0.0.1:1234`
 
-## Local model setup / 本地模型部署
+## Local model setup
 
-This project is model-agnostic. It does not download a model and does not require a particular model family. Any instruction-tuned GGUF model that can follow translation prompts and run through LM Studio's local API may be used.
+This project is model-agnostic. It does not download a model and does not require a particular model family. Any instruction-tuned GGUF model that can follow translation prompts and run through LM Studio's local API may be used. Bilingual instruct/chat models such as the Qwen family are possible candidates, but model choice should be based on available hardware and a representative translation test.
 
-本项目不会自动下载模型，也不绑定某个具体模型。选择能够在 LM Studio 中运行、适合指令对话和翻译任务的 GGUF 模型即可。Qwen 等支持中英文的 instruct/chat 模型可以作为候选，但请根据自己的硬件和实际试译结果选择。
-
-### 1. Choose a model / 选择模型
+### 1. Choose a model
 
 - Prefer an **Instruct** or **Chat** model rather than a Base model.
 - Prefer models with reliable Chinese and English capability.
 - For consumer hardware, `Q4_K_M` is a practical starting quantization; use a smaller model or quantization if memory is insufficient.
-- A larger context window consumes more memory. Start with `8192` tokens and increase it only when the document chunks require it.
-- Test one representative section before translating the entire document.
+- A larger context window consumes more memory. Start with `8192` tokens and increase it only when document chunks require it.
+- Test one representative section before translating an entire document.
 
-### 2. Load it in LM Studio / 在 LM Studio 中加载
+### 2. Load it in LM Studio
 
 1. Download or import a compatible `.gguf` file in LM Studio.
 2. For an NVIDIA GPU, select the CUDA llama.cpp runtime.
-3. Start with the following load settings:
+3. Start with these load settings:
 
    ```text
-   Context Length:       8192
-   GPU Offload:          Auto, or the highest value that loads reliably
-   Max Concurrent Predictions: 1
-   Flash Attention:      On, when supported
-   Speculative Decoding: Off
+   Context Length:              8192
+   GPU Offload:                 Auto, or the highest value that loads reliably
+   Max Concurrent Predictions:  1
+   Flash Attention:             On, when supported
+   Speculative Decoding:        Off
    ```
 
-4. If loading fails, first close memory-heavy applications, then reduce GPU Offload or Context Length. Do not force a configuration that causes Windows to use excessive swap memory.
+4. If loading fails, close memory-heavy applications first, then reduce GPU Offload or Context Length.
 5. Thinking/reasoning is not needed for direct translation. Disable it when the selected chat template supports that option.
 
-The exact layer count, batch size, KV-cache type, and offload value depend on the model, GPU memory, system RAM, and LM Studio runtime. Treat the values above as a safe starting point rather than universal requirements.
+The exact layer count, batch size, KV-cache type, and offload value depend on the model, GPU memory, system RAM, and LM Studio runtime. Treat these values as a starting point rather than universal requirements.
 
-### 3. Start the local API / 启动本地 API
+### 3. Start the local API
 
 Open LM Studio's **Developer / Local Server** page and:
 
@@ -85,16 +85,7 @@ Invoke-RestMethod -Uri "http://127.0.0.1:1234/v1/models" |
     ConvertTo-Json -Depth 5
 ```
 
-Copy the returned `id` into the local `config.json` file:
-
-```json
-{
-  "server_url": "http://127.0.0.1:1234",
-  "model": "your-loaded-model-id"
-}
-```
-
-The complete set of recommended translation parameters is already provided in `config.example.json`.
+## Installation
 
 Install dependencies:
 
@@ -108,11 +99,11 @@ Create a local configuration:
 copy config.example.json config.json
 ```
 
-Then edit `config.json` and replace `your-loaded-model-id` with the identifier returned by LM Studio's `/v1/models` endpoint.
+Edit `config.json` and replace `your-loaded-model-id` with the identifier returned by LM Studio's `/v1/models` endpoint. The example file contains the recommended translation parameters.
 
-## Quick start / 快速开始
+## Quick start
 
-Place a Word document in the ignored `input` directory, for example:
+Place a Word document in the ignored `input` directory:
 
 ```text
 input/document.docx
@@ -124,15 +115,10 @@ Inspect its structure:
 python translate_docx.py inspect input\document.docx
 ```
 
-Extract terminology:
+Extract and audit terminology:
 
 ```cmd
 python translate_docx.py terms input\document.docx
-```
-
-Audit the high-impact terminology set using a Pareto-style pass:
-
-```cmd
 python translate_docx.py audit-terms input\document.docx
 ```
 
@@ -143,7 +129,7 @@ python translate_docx.py translate input\document.docx --max-chunks 3
 python translate_docx.py render input\document.docx --allow-partial
 ```
 
-Continue the full translation:
+Continue the full translation and check its status:
 
 ```cmd
 python translate_docx.py translate input\document.docx
@@ -163,9 +149,7 @@ output/document_zh.docx
 output/document_bilingual.docx
 ```
 
-## Correct a term / 修改术语并选择性重译
-
-Example:
+## Correct a term and selectively retranslate
 
 ```cmd
 python translate_docx.py retranslate-term input\document.docx "source term" "统一译名"
@@ -175,7 +159,7 @@ python translate_docx.py render input\document.docx
 
 Only completed passages containing that source term are invalidated. Unrelated translations remain intact.
 
-## Known limitations / 已知边界
+## Known limitations
 
 - This is a translation and review workflow, not a publication-grade DOCX typesetting engine.
 - Chinese font, line spacing, and paragraph styles may require adjustment in Word.
@@ -186,4 +170,4 @@ Only completed passages containing that source term are invalidated. Unrelated t
 
 ## License
 
-MIT
+[MIT](LICENSE)
