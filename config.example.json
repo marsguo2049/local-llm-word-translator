@@ -1,0 +1,18 @@
+{
+  "server_url": "http://127.0.0.1:1234",
+  "model": "your-loaded-model-id",
+  "temperature": 0.1,
+  "top_p": 0.95,
+  "top_k": 40,
+  "min_p": 0.05,
+  "repeat_penalty": 1.0,
+  "max_output_tokens": 2048,
+  "reasoning": "off",
+  "chunk_words": 450,
+  "term_scan_words": 1800,
+  "term_audit_batch_size": 10,
+  "request_timeout_seconds": 600,
+  "request_retries": 3,
+  "translate_footnotes": true,
+  "translate_endnotes": true
+}

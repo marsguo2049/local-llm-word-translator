@@ -1,0 +1,34 @@
+# Private documents and generated data
+input/*
+output/*
+progress/*
+logs/*
+glossary/*
+!input/.gitkeep
+!output/.gitkeep
+!progress/.gitkeep
+!logs/.gitkeep
+!glossary/.gitkeep
+
+# Local configuration (may later contain private endpoints or tokens)
+config.json
+.env
+.env.*
+!.env.example
+
+# Documents and translation artifacts
+*.doc
+*.docx
+*.pdf
+*.csv
+*.jsonl
+
+# Python and editor files
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
