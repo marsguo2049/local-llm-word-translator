@@ -31,6 +31,28 @@ logs/        prompts, responses, and runtime logs
 
 `config.json` is also ignored. Only the sanitized `config.example.json` is public.
 
+## Project structure
+
+```text
+local-llm-word-translator/
+├── translate_docx.py       main command-line program
+├── config.example.json     safe configuration template
+├── config.json             local configuration (ignored by Git)
+├── requirements.txt        Python dependencies
+├── input/                  private source DOCX files
+├── output/                 generated Chinese and bilingual DOCX files
+├── progress/               resumable translation state and cached results
+├── glossary/               extracted, audited, and corrected terminology
+├── logs/                   local request and runtime logs
+├── README.md               English documentation
+├── README.zh-CN.md         Simplified Chinese documentation
+└── LICENSE                 MIT License
+```
+
+The five data directories contain only a tracked `.gitkeep` placeholder in the public repository. Their real contents are created or supplied locally and remain ignored by Git.
+
+`translate_docx.py` contains the document inspection, terminology, translation, recovery, status, selective retranslation, and rendering commands. `config.example.json` is copied to `config.json`, where each user sets the local API address, model identifier, and translation parameters.
+
 ## Requirements
 
 - Python 3.11 or 3.12

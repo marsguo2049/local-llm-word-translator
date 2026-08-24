@@ -31,6 +31,28 @@ logs/        提示词、模型回复和运行日志
 
 本机实际配置 `config.json` 同样不会进入 Git。仓库只公开经过清理的 `config.example.json`。
 
+## 项目结构
+
+```text
+local-llm-word-translator/
+├── translate_docx.py       主命令行程序
+├── config.example.json     不含私人信息的配置模板
+├── config.json             本机实际配置（被 Git 忽略）
+├── requirements.txt        Python 依赖
+├── input/                  私人的原始 DOCX 文档
+├── output/                 生成的纯中文和中英对照 DOCX
+├── progress/               断点进度和已缓存的翻译结果
+├── glossary/               自动提取、审校及修正后的术语
+├── logs/                   本地请求与运行日志
+├── README.md               英文说明
+├── README.zh-CN.md         简体中文说明
+└── LICENSE                 MIT 许可证
+```
+
+公开仓库中的五个数据目录只保留一个 `.gitkeep` 占位文件。真实内容由用户在本地放入或由程序生成，并持续受到 `.gitignore` 保护。
+
+`translate_docx.py` 集中了文档检查、术语处理、翻译、错误恢复、进度查询、选择性重译和 Word 输出命令。用户需要把 `config.example.json` 复制为 `config.json`，再在本地填写 API 地址、模型标识和翻译参数。
+
 ## 环境要求
 
 - Python 3.11 或 3.12
