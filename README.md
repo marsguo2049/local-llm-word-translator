@@ -35,6 +35,67 @@ logs/        prompts, responses, and runtime logs
 - LM Studio with a chat/instruct GGUF model loaded
 - LM Studio local server running, normally at `http://127.0.0.1:1234`
 
+## Local model setup / 本地模型部署
+
+This project is model-agnostic. It does not download a model and does not require a particular model family. Any instruction-tuned GGUF model that can follow translation prompts and run through LM Studio's local API may be used.
+
+本项目不会自动下载模型，也不绑定某个具体模型。选择能够在 LM Studio 中运行、适合指令对话和翻译任务的 GGUF 模型即可。Qwen 等支持中英文的 instruct/chat 模型可以作为候选，但请根据自己的硬件和实际试译结果选择。
+
+### 1. Choose a model / 选择模型
+
+- Prefer an **Instruct** or **Chat** model rather than a Base model.
+- Prefer models with reliable Chinese and English capability.
+- For consumer hardware, `Q4_K_M` is a practical starting quantization; use a smaller model or quantization if memory is insufficient.
+- A larger context window consumes more memory. Start with `8192` tokens and increase it only when the document chunks require it.
+- Test one representative section before translating the entire document.
+
+### 2. Load it in LM Studio / 在 LM Studio 中加载
+
+1. Download or import a compatible `.gguf` file in LM Studio.
+2. For an NVIDIA GPU, select the CUDA llama.cpp runtime.
+3. Start with the following load settings:
+
+   ```text
+   Context Length:       8192
+   GPU Offload:          Auto, or the highest value that loads reliably
+   Max Concurrent Predictions: 1
+   Flash Attention:      On, when supported
+   Speculative Decoding: Off
+   ```
+
+4. If loading fails, first close memory-heavy applications, then reduce GPU Offload or Context Length. Do not force a configuration that causes Windows to use excessive swap memory.
+5. Thinking/reasoning is not needed for direct translation. Disable it when the selected chat template supports that option.
+
+The exact layer count, batch size, KV-cache type, and offload value depend on the model, GPU memory, system RAM, and LM Studio runtime. Treat the values above as a safe starting point rather than universal requirements.
+
+### 3. Start the local API / 启动本地 API
+
+Open LM Studio's **Developer / Local Server** page and:
+
+1. Load the selected model.
+2. Start the server on port `1234`.
+3. Keep **Serve on Local Network** disabled unless another trusted device must connect.
+4. Authentication may remain disabled when the server is restricted to `127.0.0.1`.
+5. Confirm that the model is marked `READY`.
+
+Verify the server in PowerShell:
+
+```powershell
+Invoke-RestMethod -Uri "http://127.0.0.1:1234/v1/models" |
+    ConvertTo-Json -Depth 5
+```
+
+Copy the returned `id` into the local `config.json` file:
+
+```json
+{
+  "server_url": "http://127.0.0.1:1234",
+  "model": "your-loaded-model-id"
+}
+```
+
+The complete set of recommended translation parameters is already provided in `config.example.json`.
+
 Install dependencies:
 
 ```bash
