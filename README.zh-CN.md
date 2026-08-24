@@ -59,6 +59,8 @@ local-llm-word-translator/
 - LM Studio，以及一个已经加载的 chat/instruct GGUF 模型
 - LM Studio 本地服务器，通常运行于 `http://127.0.0.1:1234`
 
+如果还没有部署本地模型，请先阅读 [在 Windows 本地运行文本生成大模型](https://github.com/marsguo2049/my-llm/blob/main/guides/local-deployment/README.zh-CN.md)。下面的内容是为已经安装 LM Studio 的用户准备的精简参考。
+
 ## 本地模型部署
 
 本项目不会自动下载模型，也不绑定某个具体模型。只要模型能够在 LM Studio 中运行、遵循翻译指令，并通过本地 API 接收请求，就可以使用。Qwen 等支持中英文的 instruct/chat 模型可以作为候选，但应当根据自己的硬件条件和代表性段落的试译结果进行选择。

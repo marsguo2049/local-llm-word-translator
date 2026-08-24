@@ -59,6 +59,8 @@ The five data directories contain only a tracked `.gitkeep` placeholder in the p
 - LM Studio with a chat/instruct GGUF model loaded
 - LM Studio local server running, normally at `http://127.0.0.1:1234`
 
+New to local models? Follow [Run a text-generation LLM locally on Windows](https://github.com/marsguo2049/my-llm/blob/main/guides/local-deployment/README.md) first. The section below is a compact reference for users who already have LM Studio installed.
+
 ## Local model setup
 
 This project is model-agnostic. It does not download a model and does not require a particular model family. Any instruction-tuned GGUF model that can follow translation prompts and run through LM Studio's local API may be used. Bilingual instruct/chat models such as the Qwen family are possible candidates, but model choice should be based on available hardware and a representative translation test.
