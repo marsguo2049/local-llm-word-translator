@@ -159,6 +159,21 @@ python translate_docx.py render input\document.docx
 
 程序只会让包含该英文术语的已完成段落失效并重新翻译，不影响其他翻译结果。
 
+## 相关项目与替代方案
+
+本项目主要解决“通过 LM Studio 在本地进行可断点续传的 Word 英译中”这一类需求。如果你更重视其他文档格式、复杂排版还原、图形界面，或者希望使用传统机器翻译服务，下面的项目可能更合适。
+
+| 你的主要需求 | 可以参考 | 更适合的原因 |
+| --- | --- | --- |
+| 翻译科学论文 PDF，并尽可能保留公式和页面排版 | [PDFMathTranslate](https://github.com/PDFMathTranslate/PDFMathTranslate) | 专门面向双语 PDF 翻译，并支持多种翻译后端。 |
+| 需要图形界面，同时处理 DOCX、PDF，并连接 Ollama 或 OpenAI-compatible 接口 | [TransDocs](https://github.com/codefitz/TransDocs) | 提供 Flask Web 界面、语言检测、校对模式及多种文档元素处理。 |
+| 制作保留原书结构的中英对照 EPUB | [EPUB Translator](https://github.com/oomol-lab/epub-translator) | 专门面向 EPUB，并将原文和译文组合为双语电子书。 |
+| 需要自托管的通用翻译 API，但不需要大模型工作流 | [LibreTranslate](https://github.com/LibreTranslate/LibreTranslate) | 提供由 Argos Translate 驱动、可离线运行的通用机器翻译 API。 |
+| 需要轻量的离线 Python 库、命令行或桌面翻译工具 | [Argos Translate](https://github.com/argosopentech/argos-translate) | 使用可安装的语言包，无需 LM Studio。 |
+| 需要 DOCX 修订、红线比较或 LLM Agent 的修订追踪工作流 | [Adeu](https://github.com/dealfluence/adeu) | 侧重 DOCX 与 LLM 之间的安全往返，并可把修改投射为修订记录。 |
+
+以上链接仅供比较和参考，不代表背书。处理敏感文档前，请自行核对各项目的最新文档、许可证、模型或服务商配置及隐私行为。界面在本地运行，不代表翻译一定在本地完成；如果选择云端翻译后端，文档内容仍可能被发送到外部服务。
+
 ## 已知限制
 
 - 本项目是翻译和审校工作流，不是出版级 Word 排版引擎。

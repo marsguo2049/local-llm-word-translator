@@ -159,6 +159,21 @@ python translate_docx.py render input\document.docx
 
 Only completed passages containing that source term are invalidated. Unrelated translations remain intact.
 
+## Related projects and alternatives
+
+This project focuses on private, resumable English-to-Chinese translation of Word documents through LM Studio. Another tool may be a better fit when your main requirement is a different document format, stronger layout preservation, a graphical interface, or a traditional machine-translation service.
+
+| If you need... | Consider | Why it may fit better |
+| --- | --- | --- |
+| Scientific PDF translation with formulas and page layout preserved | [PDFMathTranslate](https://github.com/PDFMathTranslate/PDFMathTranslate) | Designed specifically for bilingual PDF translation and supports multiple translation backends. |
+| A GUI and support for both DOCX and PDF with Ollama or an OpenAI-compatible endpoint | [TransDocs](https://github.com/codefitz/TransDocs) | Provides a Flask web interface, language detection, proofreading, and multiple document elements. |
+| Bilingual EPUB books | [EPUB Translator](https://github.com/oomol-lab/epub-translator) | Preserves EPUB structure and presents the original and translation together. |
+| A self-hosted translation API without an LLM workflow | [LibreTranslate](https://github.com/LibreTranslate/LibreTranslate) | Provides a general-purpose, offline-capable machine-translation API powered by Argos Translate. |
+| A lightweight offline Python library, CLI, or desktop translator | [Argos Translate](https://github.com/argosopentech/argos-translate) | Uses installable language packages and does not require LM Studio. |
+| DOCX editing, redlining, or tracked-change workflows for LLM agents | [Adeu](https://github.com/dealfluence/adeu) | Focuses on safe DOCX-to-LLM round trips and projecting edits back as tracked changes. |
+
+These links are references, not endorsements. Review each project's current documentation, license, model/provider configuration, and privacy behavior before processing sensitive documents. A local interface does not guarantee local processing if the selected translation backend is a cloud service.
+
 ## Known limitations
 
 - This is a translation and review workflow, not a publication-grade DOCX typesetting engine.
